@@ -1,0 +1,20 @@
+<script>
+	import Button from './lib/Button.svelte';
+	import FaAngellist from 'svelte-icons/fa/FaAngellist.svelte';
+	import FaBug from 'svelte-icons/fa/FaBug.svelte';
+</script>
+
+<Button size="small" shadow disabled on:*>
+	<div style:width="20px" slot="leftContent" let:isLeftHovered>
+		{#if isLeftHovered}
+			<FaAngellist />
+		{:else}
+			<FaBug />
+		{/if}
+	</div>
+	<!-- Text below inserts into slot w/ "Fallback" text -->
+	Button Text
+</Button>
+
+<style>
+</style>
