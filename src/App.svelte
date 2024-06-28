@@ -1,20 +1,61 @@
 <script>
-	import Button from './lib/Button.svelte';
-	import FaAngellist from 'svelte-icons/fa/FaAngellist.svelte';
-	import FaBug from 'svelte-icons/fa/FaBug.svelte';
+    import TodoList from "./lib/TodoList.svelte"
+    import { v4 as uuid} from "uuid";
+
+    let todos = [
+        {
+            id: uuid(),
+            title: 'Todo 1',
+            completed: true
+        },
+        {
+            id: uuid(),
+            title: 'Todo 2',
+            completed: false
+        },
+        {
+            id: uuid(),
+            title: 'Todo 3',
+            completed: true
+        }
+    ]
+    
+    function handleAddTodo(event) {
+        
+        todos = [
+            ...todos, 
+            {
+                id: uuid(),
+                title: event.detail.title,
+                completed: false
+            }
+        ]
+
+    }
+
+    function handleRemoveTodo(event) {
+        
+        todos = todos.filter(t => t.id != event.detail.id)
+
+    }
+
+    function handleToggleTodo(event) {
+        todos = todos.map(t => {
+            if(t.id === event.detail.id) {
+                return {...t, completed: event.detail.value}
+            }
+        })
+    }
 </script>
 
-<Button size="small" shadow disabled on:*>
-	<div style:width="20px" slot="leftContent" let:isLeftHovered>
-		{#if isLeftHovered}
-			<FaAngellist />
-		{:else}
-			<FaBug />
-		{/if}
-	</div>
-	<!-- Text below inserts into slot w/ "Fallback" text -->
-	Button Text
-</Button>
+<TodoList 
+    {todos} 
+    on:addTodo={handleAddTodo}
+    on:removeTodo={handleRemoveTodo}
+    on:toggleTodo={handleToggleTodo}
+/>
+
 
 <style>
+
 </style>

@@ -6,12 +6,12 @@
 
 	let isLeftHovered;
 
-	console.log($$restProps);
+	// console.log($$restProps);
 </script>
-
+<!-- on:click={() => alert(true)} -->
 <button
 	{...$$restProps}
-	on:click={() => alert(true)}
+	
 	style:--buttonBgColor={bgColor}
 	style:--buttonTextColor={textColor}
 	class:size-lg={size === 'large'}

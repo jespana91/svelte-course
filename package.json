@@ -15,5 +15,8 @@
     "svelte-icons": "^2.1.0",
     "svelte-preprocess-delegate-events": "^0.4.4",
     "vite": "^5.0.8"
+  },
+  "dependencies": {
+    "uuid": "^10.0.0"
   }
 }
