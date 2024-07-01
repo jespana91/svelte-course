@@ -6,27 +6,55 @@
     import { createEventDispatcher } from "svelte";
 
     export let todos = [];    
+    export const readOnly = 'read only';
+    export function clearInput() {
+        inputText = '';
+    }
+    export function focusInput() {
+        input.focus();
+    }
+    
     let inputText = '';
+    let input;
 
     const dispatch = createEventDispatcher();
     
     function handleAddTodo() {
-        dispatch('addTodo', {
-            title: inputText
-        })
-        inputText = '';
+        const isNotCancelled = dispatch(
+            'addTodo', 
+            {
+                title: inputText
+            },
+            {
+                cancelable: true
+            }
+        );
+
+        if(isNotCancelled) {
+            inputText = '';
+        }
+        
     }
 
     function handleRemoveTodo(id) {
-        dispatch('removeTodo', {
-            id
-        })
+        dispatch(
+            'removeTodo', 
+            {
+                id
+            }
+        );
     }
 
     function handleToggleTodo(id, value) {
-        dispatch('toggleTodo', {
-            id, value
-        })
+        console.log(value);
+
+        dispatch(
+            'toggleTodo', 
+            {
+                id, 
+                value
+            }
+        );
     }
 </script>
 
@@ -35,14 +63,19 @@
     <!-- display the list -->
     <ul>
         {#each todos as {id, title, completed} (id)}
+        {@debug id, title}
             <!-- {@const number = index + 1} -->
             <li>
                 
                 <label>
-                    <input on:input={(event) => {
-                        event.currentTarget.checked = completed;
-                        handleToggleTodo(id, !completed);
-                    }} type="checkbox" checked={completed}>
+                    <input 
+                        on:input={(event) => {
+                            event.currentTarget.checked = completed;
+                            handleToggleTodo(id, !completed);
+                        }} 
+                        type="checkbox" 
+                        checked={completed}
+                    />
                     {title}
                 </label>
                 <button on:click={() => handleRemoveTodo(id)}>Remove</button>
@@ -58,7 +91,7 @@
     <!-- form to add new todos -->
     <form class="add-todo-form" on:submit|preventDefault={handleAddTodo}>
 
-        <input bind:value={inputText}/>
+        <input bind:this={input} bind:value={inputText}/>
         
         <Button type="submit" disabled={!inputText}>
             <div style:width="20px" slot="leftContent">
