@@ -3,19 +3,39 @@
 <script>
     import Button from "./Button.svelte";
     import FaPlusCircle from 'svelte-icons/fa/FaPlusCircle.svelte'
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount, onDestroy, beforeUpdate, afterUpdate } from "svelte";
+
+    onMount(() => {
+        console.log("Mounted");
+        return () => {
+            console.log("Destroyed from Mount");
+        }
+    });
+
+    onDestroy(() => {
+        console.log("Destroyed");
+    })
+
+    beforeUpdate(() => {
+        if(listDiv)
+            console.log(listDiv.offsetHeight);
+    })
+
+    afterUpdate(() => {
+        console.log(listDiv.offsetHeight);
+    })
 
     export let todos = [];    
     export const readOnly = 'read only';
     export function clearInput() {
         inputText = '';
     }
-    export function focusInput() {
-        input.focus();
-    }
+    // export function focusInput() {
+    //     input.focus();
+    // }
     
     let inputText = '';
-    let input;
+    let input, listDiv;
 
     const dispatch = createEventDispatcher();
     
@@ -46,7 +66,6 @@
     }
 
     function handleToggleTodo(id, value) {
-        console.log(value);
 
         dispatch(
             'toggleTodo', 
@@ -59,32 +78,32 @@
 </script>
 
 <div class="todo-list-wrapper">
-
-    <!-- display the list -->
-    <ul>
-        {#each todos as {id, title, completed} (id)}
-        {@debug id, title}
-            <!-- {@const number = index + 1} -->
-            <li>
-                
-                <label>
-                    <input 
-                        on:input={(event) => {
-                            event.currentTarget.checked = completed;
-                            handleToggleTodo(id, !completed);
-                        }} 
-                        type="checkbox" 
-                        checked={completed}
-                    />
-                    {title}
-                </label>
-                <button on:click={() => handleRemoveTodo(id)}>Remove</button>
-                
-            </li>
-        {/each}
-        
-    </ul>
-
+    <div class="todo-list" bind:this={listDiv}>
+        <!-- display the list -->
+        <ul>
+            {#each todos as {id, title, completed} (id)}
+            <!-- {@debug id, title} -->
+                <!-- {@const number = index + 1} -->
+                <li>
+                    
+                    <label>
+                        <input 
+                            on:input={(event) => {
+                                event.currentTarget.checked = completed;
+                                handleToggleTodo(id, !completed);
+                            }} 
+                            type="checkbox" 
+                            checked={completed}
+                        />
+                        {title}
+                    </label>
+                    <button on:click={() => handleRemoveTodo(id)}>Remove</button>
+                    
+                </li>
+            {/each}
+            
+        </ul>
+    </div>
     <!-- show the input text dynamically -->
     {inputText}
 

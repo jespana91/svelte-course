@@ -3,6 +3,7 @@
     import { v4 as uuid} from "uuid";
 
     let todoList;
+    let showList = true;
 
     let todos = [
         {
@@ -21,7 +22,7 @@
             completed: true
         }
     ]
-    $: console.log(todos);
+    
     function handleAddTodo(event) {
         event.preventDefault();
         setTimeout(() => {
@@ -55,18 +56,23 @@
     }
 </script>
 
+<label>
+    <input type="checkbox" bind:checked={showList}/>
+    Show/Hide List
+</label>
 
-<TodoList 
-    {todos} 
-    bind:this={todoList}
-    on:addTodo={handleAddTodo}
-    on:removeTodo={handleRemoveTodo}
-    on:toggleTodo={handleToggleTodo}
-/>
-
-<button on:click={() => {
+{#if showList}
+    <TodoList 
+        {todos} 
+        bind:this={todoList}
+        on:addTodo={handleAddTodo}
+        on:removeTodo={handleRemoveTodo}
+        on:toggleTodo={handleToggleTodo}
+    />
+{/if}
+<!-- <button on:click={() => {
     todoList.focusInput();
-}}>Focus Input</button>
+}}>Focus Input</button> -->
 
 <style>
 
