@@ -57,18 +57,23 @@
 </script>
 
 <label>
-    <input type="checkbox" bind:checked={showList}/>
+    <input 
+        type="checkbox" 
+        bind:checked={showList}
+    />
     Show/Hide List
 </label>
 
 {#if showList}
-    <TodoList 
-        {todos} 
-        bind:this={todoList}
-        on:addTodo={handleAddTodo}
-        on:removeTodo={handleRemoveTodo}
-        on:toggleTodo={handleToggleTodo}
-    />
+    <div style:max-width="200px">
+        <TodoList 
+            {todos} 
+            bind:this={todoList}
+            on:addTodo={handleAddTodo}
+            on:removeTodo={handleRemoveTodo}
+            on:toggleTodo={handleToggleTodo}
+        />
+    </div>
 {/if}
 <!-- <button on:click={() => {
     todoList.focusInput();

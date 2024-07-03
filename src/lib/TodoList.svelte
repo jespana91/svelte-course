@@ -6,27 +6,37 @@
     import { createEventDispatcher, onMount, onDestroy, beforeUpdate, afterUpdate } from "svelte";
 
     onMount(() => {
-        console.log("Mounted");
-        return () => {
-            console.log("Destroyed from Mount");
-        }
+        // console.log("Mounted");
+        // return () => {
+        //     console.log("Destroyed from Mount");
+        // }
     });
 
     onDestroy(() => {
-        console.log("Destroyed");
+        // console.log("Destroyed");
     })
 
     beforeUpdate(() => {
-        if(listDiv)
-            console.log(listDiv.offsetHeight);
+        // if(listDiv)
+        //     console.log(listDiv.offsetHeight);
     })
 
     afterUpdate(() => {
-        console.log(listDiv.offsetHeight);
+        if(autoScroll){
+            listDiv.scrollTo(0, listDiv.scrollHeight);
+            autoScroll = false;
+        }
+            
     })
 
     export let todos = [];    
-    export const readOnly = 'read only';
+    let prevTodos = todos;
+
+    $: {
+        autoScroll = todos.length > prevTodos.length;
+        prevTodos = todos;
+    }
+
     export function clearInput() {
         inputText = '';
     }
@@ -35,7 +45,8 @@
     // }
     
     let inputText = '';
-    let input, listDiv;
+    let input, listDiv, autoScroll;
+
 
     const dispatch = createEventDispatcher();
     
@@ -124,4 +135,8 @@
 
 <style>
 
+.todo-list {
+    max-height: 150px;
+    overflow: auto;
+}
 </style>
