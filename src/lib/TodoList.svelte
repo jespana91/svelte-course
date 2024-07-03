@@ -40,12 +40,13 @@
     export function clearInput() {
         inputText = '';
     }
+    
     // export function focusInput() {
     //     input.focus();
     // }
     
     let inputText = '';
-    let input, listDiv, autoScroll;
+    let input, listDiv, autoScroll, listDivHeight;
 
 
     const dispatch = createEventDispatcher();
@@ -87,9 +88,9 @@
         );
     }
 </script>
-
+{listDivHeight}
 <div class="todo-list-wrapper">
-    <div class="todo-list" bind:this={listDiv}>
+    <div class="todo-list" bind:offsetHeight={listDivHeight} bind:this={listDiv}>
         <!-- display the list -->
         <ul>
             {#each todos as {id, title, completed} (id)}
