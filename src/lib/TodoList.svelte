@@ -23,7 +23,7 @@
 
     afterUpdate(() => {
         if(autoScroll){
-            listDiv.scrollTo(0, listDiv.scrollHeight);
+            listDiv.scrollTo(0, listDivScrollHeight);
             autoScroll = false;
         }
             
@@ -46,7 +46,7 @@
     // }
     
     let inputText = '';
-    let input, listDiv, autoScroll, listDivHeight;
+    let input, listDiv, autoScroll, listDivScrollHeight;
 
 
     const dispatch = createEventDispatcher();
@@ -88,33 +88,35 @@
         );
     }
 </script>
-{listDivHeight}
+
 <div class="todo-list-wrapper">
-    <div class="todo-list" bind:offsetHeight={listDivHeight} bind:this={listDiv}>
-        <!-- display the list -->
-        <ul>
-            {#each todos as {id, title, completed} (id)}
-            <!-- {@debug id, title} -->
-                <!-- {@const number = index + 1} -->
-                <li>
-                    
-                    <label>
-                        <input 
-                            on:input={(event) => {
-                                event.currentTarget.checked = completed;
-                                handleToggleTodo(id, !completed);
-                            }} 
-                            type="checkbox" 
-                            checked={completed}
-                        />
-                        {title}
-                    </label>
-                    <button on:click={() => handleRemoveTodo(id)}>Remove</button>
-                    
-                </li>
-            {/each}
-            
-        </ul>
+    <div class="todo-list" bind:this={listDiv}>
+        <div bind:offsetHeight={listDivScrollHeight}>
+            <!-- display the list -->
+            <ul>
+                {#each todos as {id, title, completed} (id)}
+                <!-- {@debug id, title} -->
+                    <!-- {@const number = index + 1} -->
+                    <li>
+                        
+                        <label>
+                            <input 
+                                on:input={(event) => {
+                                    event.currentTarget.checked = completed;
+                                    handleToggleTodo(id, !completed);
+                                }} 
+                                type="checkbox" 
+                                checked={completed}
+                            />
+                            {title}
+                        </label>
+                        <button on:click={() => handleRemoveTodo(id)}>Remove</button>
+                        
+                    </li>
+                {/each}
+                
+            </ul>
+        </div>
     </div>
     <!-- show the input text dynamically -->
     {inputText}
